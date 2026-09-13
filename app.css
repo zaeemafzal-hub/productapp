@@ -95,15 +95,13 @@ main {
   background-color: #ffdddd;
 }
 
-/* Tablet */
+
 
 @media (max-width: 900px) {
   #productsContainer {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-/* Mobile */
 
 @media (max-width: 600px) {
   #productsContainer {

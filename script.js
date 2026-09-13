@@ -2,12 +2,10 @@ const productsContainer = document.getElementById("productsContainer");
 const searchInput = document.getElementById("searchInput");
 const favouriteCount = document.getElementById("favouriteCount");
 const loading = document.getElementById("loading");
-const error = document.getElementById("error");
+const errorMessage = document.getElementById("error");
 
 let products = [];
 let favourites = [];
-
-// Get products from API
 
 async function getProducts() {
   try {
@@ -31,62 +29,46 @@ async function getProducts() {
       "Sorry, we could not load the products. Please try again.";
   }
 }
-
-// Show products on the page
-
 function showProducts(productsToShow) {
-  productsContainer.innerHTML = "";
-
   if (productsToShow.length === 0) {
     productsContainer.innerHTML = "<p>No products found.</p>";
     return;
   }
 
-  productsToShow.forEach(function (product) {
-    const card = document.createElement("div");
-    card.classList.add("product-card");
+  productsContainer.innerHTML = productsToShow
+    .map(
+      (product) => `
+        <div class="product-card">
+            <img 
+                src="${product.thumbnail}" 
+                alt="${product.title}"
+            >
+            <h2>${product.title}</h2>
 
-    const image = document.createElement("img");
-    image.src = product.thumbnail;
-    image.alt = product.title;
+            <p class="product-price">
+                $${product.price}
+            </p>
+            <button
+                class="favourite-button ${
+                  favourites.includes(product.id) ? "active" : ""
+                }"
+                onclick="toggleFavourite(${product.id})"
+            >
+                ${
+                  favourites.includes(product.id)
+                    ? "Remove Favourite"
+                    : "Add Favourite"
+                }
+            </button>
 
-    const title = document.createElement("h2");
-    title.textContent = product.title;
-
-    const price = document.createElement("p");
-    price.classList.add("product-price");
-    price.textContent = "$" + product.price;
-
-    const button = document.createElement("button");
-    button.classList.add("favourite-button");
-
-    if (favourites.includes(product.id)) {
-      button.textContent = "♥ Remove Favourite";
-      button.classList.add("active");
-    } else {
-      button.textContent = "♡ Add Favourite";
-    }
-
-    button.addEventListener("click", function () {
-      toggleFavourite(product.id);
-    });
-
-    card.appendChild(image);
-    card.appendChild(title);
-    card.appendChild(price);
-    card.appendChild(button);
-
-    productsContainer.appendChild(card);
-  });
+        </div>
+    `,
+    )
+    .join("");
 }
-
-// Add or remove favourite
-
 function toggleFavourite(productId) {
   if (favourites.includes(productId)) {
-    favourites = favourites.filter(function (id) {
-      return id !== productId;
-    });
+    favourites = favourites.filter((id) => id !== productId);
   } else {
     favourites.push(productId);
   }
@@ -95,22 +77,16 @@ function toggleFavourite(productId) {
 
   searchProducts();
 }
-
-// Search products
-
 function searchProducts() {
   const searchText = searchInput.value.toLowerCase();
 
-  const filteredProducts = products.filter(function (product) {
-    return product.title.toLowerCase().includes(searchText);
-  });
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchText),
+  );
 
   showProducts(filteredProducts);
 }
 
-
-searchInput.addEventListener("input", function () {
-  searchProducts();
-});
+searchInput.addEventListener("input", searchProducts);
 
 getProducts();
