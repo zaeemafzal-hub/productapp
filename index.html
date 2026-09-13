@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Product App</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Product Store</h1>
+      <input type="text" id="searchInput" placeholder="Search products..." />
+      <p>
+        Favourites:
+        <span id="favouriteCount">0</span>
+      </p>
+    </header>
+
+    <main>
+      <p id="loading">Loading...</p>
+
+      <p id="error"></p>
+
+      <div id="productsContainer"></div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
